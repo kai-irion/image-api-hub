@@ -1,3 +1,18 @@
+# Image API Hub
+
+A ChatGPT-like web app for generating and editing images through OpenAI's
+gpt-image-2 API. Users sign in with Google, chat in a familiar
+message-thread UI, and can attach an image to request edits. Chats can be
+grouped into projects. Each user supplies and stores their own OpenAI API
+key (encrypted at rest) on the settings page.
+
+**Stack:** Next.js (App Router, TypeScript), Tailwind CSS, deployed to
+Vercel. Supabase for auth (Google OAuth), Postgres database, and file
+storage.
+
+The project is currently scaffolded with placeholder/mock UI only — no
+OpenAI API calls or database schema are wired up yet.
+
 # Developer workflow: git worktrees
 
 This repo uses git worktrees to run multiple Claude Code agents in parallel
@@ -37,3 +52,13 @@ without them interfering with each other's branches or uncommitted changes.
   a sibling worktree folder, opens it in a new VS Code window.
 - `./close-agent.sh <task-name>` — removes the worktree folder once its PR
   is merged (branch itself is left for manual deletion).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
