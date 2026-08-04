@@ -1,13 +1,23 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type SaveState = "idle" | "saving" | "saved";
 
 export default function SettingsPage() {
+  const router = useRouter();
   const [apiKey, setApiKey] = useState("");
   const [showKey, setShowKey] = useState(false);
   const [saveState, setSaveState] = useState<SaveState>("idle");
+
+  function handleBack() {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  }
 
   function handleSave(event: React.FormEvent) {
     event.preventDefault();
@@ -18,7 +28,15 @@ export default function SettingsPage() {
 
   return (
     <>
-      <header className="flex h-14 shrink-0 items-center border-b border-neutral-200 px-6 dark:border-neutral-800">
+      <header className="flex h-14 shrink-0 items-center gap-3 border-b border-neutral-200 px-6 dark:border-neutral-800">
+        <button
+          type="button"
+          onClick={handleBack}
+          aria-label="Back to chat"
+          className="-ml-1.5 flex items-center gap-1.5 rounded-md px-1.5 py-1 text-sm text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+        >
+          <BackIcon />
+        </button>
         <h1 className="text-sm font-medium text-neutral-700 dark:text-neutral-200">
           Settings
         </h1>
@@ -84,5 +102,19 @@ export default function SettingsPage() {
         </div>
       </div>
     </>
+  );
+}
+
+function BackIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M9.5 3.5 4.5 8l5 4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

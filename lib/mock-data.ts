@@ -1,4 +1,4 @@
-import type { ChatMessage, ChatSummary, Project } from "@/lib/types";
+import type { ChatSummary, Project } from "@/lib/types";
 
 export const mockProjects: Project[] = [
   { id: "proj-1", name: "Product mockups" },
@@ -29,20 +29,5 @@ export const mockChats: ChatSummary[] = [
     title: "Isometric city illustration",
     projectId: null,
     updatedAt: "2026-08-01T18:45:00Z",
-  },
-];
-
-export const mockMessages: ChatMessage[] = [
-  {
-    id: "msg-1",
-    role: "user",
-    content: "Generate a cozy cabin in the woods, autumn, warm lighting.",
-  },
-  {
-    id: "msg-2",
-    role: "assistant",
-    content: "Here's a cozy autumn cabin concept for you.",
-    imageUrl:
-      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Crect width='512' height='512' fill='%23e7dfd3'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='20' fill='%23999' text-anchor='middle' dy='.3em'%3Emock image%3C/text%3E%3C/svg%3E",
   },
 ];

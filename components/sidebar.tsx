@@ -19,6 +19,10 @@ export function Sidebar({ userEmail }: SidebarProps) {
     router.refresh();
   }
 
+  function handleNewChat() {
+    router.push(`/chat/${crypto.randomUUID()}`);
+  }
+
   const unfiledChats = mockChats.filter((chat) => chat.projectId === null);
 
   return (
@@ -26,6 +30,7 @@ export function Sidebar({ userEmail }: SidebarProps) {
       <div className="p-3">
         <button
           type="button"
+          onClick={handleNewChat}
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
           <PlusIcon />

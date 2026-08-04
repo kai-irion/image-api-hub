@@ -27,6 +27,8 @@ export function MessageList({ messages }: { messages: ChatMessage[] }) {
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === "user";
+  const isError = message.status === "error";
+  const isPending = message.status === "pending";
 
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -34,7 +36,9 @@ function MessageBubble({ message }: { message: ChatMessage }) {
         className={`max-w-xl rounded-2xl px-4 py-2.5 text-sm ${
           isUser
             ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
-            : "bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-100"
+            : isError
+              ? "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300"
+              : "bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-100"
         }`}
       >
         {message.attachmentName && (
@@ -43,7 +47,9 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             {message.attachmentName}
           </div>
         )}
-        <p className="whitespace-pre-wrap">{message.content}</p>
+        <p className={`whitespace-pre-wrap ${isPending ? "animate-pulse" : ""}`}>
+          {message.content}
+        </p>
         {message.imageUrl && (
           // eslint-disable-next-line @next/next/no-img-element
           <img

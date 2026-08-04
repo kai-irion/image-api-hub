@@ -18,4 +18,5 @@ export type ChatMessage = {
   content: string;
   imageUrl?: string;
   attachmentName?: string;
+  status?: "pending" | "error";
 };

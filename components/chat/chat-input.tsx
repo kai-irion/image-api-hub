@@ -2,15 +2,20 @@
 
 import { useRef, useState } from "react";
 
-export function ChatInput() {
+type ChatInputProps = {
+  onSend: (prompt: string, attachment: File | null) => void;
+  disabled?: boolean;
+};
+
+export function ChatInput({ onSend, disabled }: ChatInputProps) {
   const [value, setValue] = useState("");
   const [attachment, setAttachment] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!value.trim() && !attachment) return;
-    // Sending is not wired up yet — this is placeholder UI.
+    if (disabled || (!value.trim() && !attachment)) return;
+    onSend(value.trim(), attachment);
     setValue("");
     setAttachment(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
@@ -49,7 +54,8 @@ export function ChatInput() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="shrink-0 rounded-lg p-2 text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+          disabled={disabled}
+          className="shrink-0 rounded-lg p-2 text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800 disabled:opacity-40 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
           aria-label="Attach image"
         >
           <AttachIcon />
@@ -65,13 +71,14 @@ export function ChatInput() {
             }
           }}
           rows={1}
+          disabled={disabled}
           placeholder="Describe an image, or ask to edit the attached one..."
-          className="max-h-40 flex-1 resize-none bg-transparent px-1 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none dark:text-neutral-100"
+          className="max-h-40 flex-1 resize-none bg-transparent px-1 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none disabled:opacity-60 dark:text-neutral-100"
         />
 
         <button
           type="submit"
-          disabled={!value.trim() && !attachment}
+          disabled={disabled || (!value.trim() && !attachment)}
           className="shrink-0 rounded-lg bg-neutral-900 p-2 text-white transition hover:bg-neutral-700 disabled:opacity-40 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           aria-label="Send message"
         >
