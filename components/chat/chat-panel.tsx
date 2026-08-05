@@ -1,21 +1,60 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ChatInput } from "@/components/chat/chat-input";
 import { MessageList } from "@/components/chat/message-list";
+import { createClient } from "@/lib/supabase/client";
 import type { ChatMessage } from "@/lib/types";
 
-export function ChatPanel() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+function truncateTitle(prompt: string): string {
+  const trimmed = prompt.trim();
+  return trimmed.length > 60 ? `${trimmed.slice(0, 60)}...` : trimmed;
+}
+
+export function ChatPanel({
+  chatId,
+  initialMessages,
+}: {
+  chatId: string;
+  initialMessages: ChatMessage[];
+}) {
+  const router = useRouter();
+  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [isGenerating, setIsGenerating] = useState(false);
 
   async function handleSend(prompt: string, attachment: File | null) {
+    const isFirstMessage = messages.length === 0;
+    const supabase = createClient();
+
+    setIsGenerating(true);
+
+    const { data: userMessage, error: insertError } = await supabase
+      .from("messages")
+      .insert({ chat_id: chatId, role: "user", content: prompt })
+      .select("id, created_at")
+      .single();
+
+    if (insertError || !userMessage) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: "Failed to send your message. Please try again.",
+          status: "error",
+        },
+      ]);
+      setIsGenerating(false);
+      return;
+    }
+
     const pendingId = crypto.randomUUID();
 
     setMessages((prev) => [
       ...prev,
       {
-        id: crypto.randomUUID(),
+        id: userMessage.id,
         role: "user",
         content: prompt,
         attachmentName: attachment?.name,
@@ -27,11 +66,15 @@ export function ChatPanel() {
         status: "pending",
       },
     ]);
-    setIsGenerating(true);
+
+    if (isFirstMessage) {
+      await supabase.from("chats").update({ title: truncateTitle(prompt) }).eq("id", chatId);
+    }
 
     try {
       const body = new FormData();
       body.set("prompt", prompt);
+      body.set("chatId", chatId);
       if (attachment) body.set("image", attachment);
 
       const response = await fetch("/api/generate", { method: "POST", body });
@@ -45,10 +88,10 @@ export function ChatPanel() {
         prev.map((message) =>
           message.id === pendingId
             ? {
-                ...message,
-                content: "Here's your image.",
-                imageUrl: data.imageUrl,
-                status: undefined,
+                id: data.message.id,
+                role: "assistant",
+                content: data.message.content,
+                imageUrl: data.message.imageUrl,
               }
             : message,
         ),
@@ -70,6 +113,7 @@ export function ChatPanel() {
       );
     } finally {
       setIsGenerating(false);
+      router.refresh();
     }
   }
 

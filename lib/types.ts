@@ -3,11 +3,17 @@ export type ChatSummary = {
   title: string;
   projectId: string | null;
   updatedAt: string;
+  starred: boolean;
 };
 
 export type Project = {
   id: string;
   name: string;
+};
+
+export type ProjectDetail = Project & {
+  description: string | null;
+  instructions: string | null;
 };
 
 export type ChatRole = "user" | "assistant";

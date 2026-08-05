@@ -35,7 +35,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
               setAttachment(null);
               if (fileInputRef.current) fileInputRef.current.value = "";
             }}
-            className="text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-100"
+            className="rounded transition-colors duration-150 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-100"
             aria-label="Remove attachment"
           >
             ×
@@ -43,7 +43,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
         </div>
       )}
 
-      <div className="flex items-end gap-2 rounded-xl border border-neutral-300 bg-white p-2 focus-within:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900">
+      <div className="flex items-end gap-2 rounded-xl border border-neutral-300 bg-white p-2 transition-colors duration-150 focus-within:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900">
         <input
           ref={fileInputRef}
           type="file"
@@ -55,7 +55,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={disabled}
-          className="shrink-0 rounded-lg p-2 text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800 disabled:opacity-40 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+          className="shrink-0 rounded-lg p-2 text-neutral-500 transition-colors duration-150 hover:bg-neutral-100 hover:text-neutral-800 active:scale-95 disabled:opacity-40 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
           aria-label="Attach image"
         >
           <AttachIcon />
@@ -79,7 +79,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
         <button
           type="submit"
           disabled={disabled || (!value.trim() && !attachment)}
-          className="shrink-0 rounded-lg bg-neutral-900 p-2 text-white transition hover:bg-neutral-700 disabled:opacity-40 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+          className="shrink-0 rounded-lg bg-neutral-900 p-2 text-white transition-colors duration-150 hover:bg-neutral-700 active:scale-95 disabled:opacity-40 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           aria-label="Send message"
         >
           <SendIcon />
