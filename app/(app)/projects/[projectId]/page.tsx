@@ -100,14 +100,17 @@ export default async function ProjectPage({
               <h2 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
                 Chats
               </h2>
-              <NewChatInProjectButton projectId={project.id} />
+              {chats.length > 0 && <NewChatInProjectButton projectId={project.id} />}
             </div>
 
             <div className="mt-3 space-y-0.5">
               {chats.length === 0 ? (
-                <p className="text-sm text-neutral-400 dark:text-neutral-500">
-                  No chats in this project yet.
-                </p>
+                <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+                  <p className="text-sm text-neutral-400 dark:text-neutral-500">
+                    No chats yet in this project — start one below
+                  </p>
+                  <NewChatInProjectButton projectId={project.id} />
+                </div>
               ) : (
                 chats.map((chat) => (
                   <ChatRow
