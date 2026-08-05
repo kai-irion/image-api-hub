@@ -78,104 +78,117 @@ export function Sidebar({ userEmail, projects, chats }: SidebarProps) {
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 pb-3">
-        {starredChats.length > 0 && (
-          <SidebarSection title="Starred">
-            {starredChats.map((chat) => (
-              <ChatRow
-                key={chat.id}
-                chat={chat}
-                projects={projects}
-                active={pathname === `/chat/${chat.id}`}
-              />
-            ))}
-          </SidebarSection>
-        )}
-
-        <SidebarSection
-          title="Projects"
-          onAdd={() => {
-            setIsAddingProject(true);
-          }}
-        >
-          {isAddingProject && (
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                handleCreateProject();
-              }}
-              className="mb-1"
-            >
-              <input
-                autoFocus
-                value={newProjectName}
-                onChange={(event) => setNewProjectName(event.target.value)}
-                onBlur={() => {
-                  setIsAddingProject(false);
-                  setNewProjectName("");
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Escape") {
-                    setIsAddingProject(false);
-                    setNewProjectName("");
-                  }
-                }}
-                placeholder="Project name"
-                className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 outline-none transition-colors duration-150 focus:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
-              />
-            </form>
-          )}
-
-          {projects.length === 0 && !isAddingProject ? (
-            <p className="px-2 py-1 text-sm text-neutral-400 dark:text-neutral-500">
-              No projects yet
-            </p>
-          ) : (
-            projects.map((project) => (
-              <div key={project.id} className="mb-1">
-                <Link
-                  href={`/projects/${project.id}`}
-                  className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors duration-150 ${
-                    pathname === `/projects/${project.id}`
-                      ? "bg-neutral-200/80 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
-                      : "text-neutral-700 hover:bg-neutral-200/60 dark:text-neutral-300 dark:hover:bg-neutral-800"
-                  }`}
-                >
-                  <FolderIcon />
-                  <span className="truncate">{project.name}</span>
-                </Link>
-                <div className="ml-5 border-l border-neutral-200 pl-2 dark:border-neutral-800">
-                  {chats
-                    .filter((chat) => chat.projectId === project.id)
-                    .map((chat) => (
-                      <ChatRow
-                        key={chat.id}
-                        chat={chat}
-                        projects={projects}
-                        active={pathname === `/chat/${chat.id}`}
-                      />
-                    ))}
-                </div>
-              </div>
-            ))
-          )}
-        </SidebarSection>
-
-        <SidebarSection title="Recent chats">
-          {unfiledChats.length === 0 ? (
-            <p className="px-2 py-1 text-sm text-neutral-400 dark:text-neutral-500">
+        {chats.length === 0 && projects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-1 px-4 py-12 text-center">
+            <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
               No chats yet
             </p>
-          ) : (
-            unfiledChats.map((chat) => (
-              <ChatRow
-                key={chat.id}
-                chat={chat}
-                projects={projects}
-                active={pathname === `/chat/${chat.id}`}
-              />
-            ))
-          )}
-        </SidebarSection>
+            <p className="text-sm text-neutral-400 dark:text-neutral-500">
+              Start one above to get going
+            </p>
+          </div>
+        ) : (
+          <>
+            {starredChats.length > 0 && (
+              <SidebarSection title="Starred">
+                {starredChats.map((chat) => (
+                  <ChatRow
+                    key={chat.id}
+                    chat={chat}
+                    projects={projects}
+                    active={pathname === `/chat/${chat.id}`}
+                  />
+                ))}
+              </SidebarSection>
+            )}
+
+            <SidebarSection
+              title="Projects"
+              onAdd={() => {
+                setIsAddingProject(true);
+              }}
+            >
+              {isAddingProject && (
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    handleCreateProject();
+                  }}
+                  className="mb-1"
+                >
+                  <input
+                    autoFocus
+                    value={newProjectName}
+                    onChange={(event) => setNewProjectName(event.target.value)}
+                    onBlur={() => {
+                      setIsAddingProject(false);
+                      setNewProjectName("");
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Escape") {
+                        setIsAddingProject(false);
+                        setNewProjectName("");
+                      }
+                    }}
+                    placeholder="Project name"
+                    className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 outline-none transition-colors duration-150 focus:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
+                  />
+                </form>
+              )}
+
+              {projects.length === 0 && !isAddingProject ? (
+                <p className="px-2 py-1 text-sm text-neutral-400 dark:text-neutral-500">
+                  No projects yet
+                </p>
+              ) : (
+                projects.map((project) => (
+                  <div key={project.id} className="mb-1">
+                    <Link
+                      href={`/projects/${project.id}`}
+                      className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors duration-150 ${
+                        pathname === `/projects/${project.id}`
+                          ? "bg-neutral-200/80 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
+                          : "text-neutral-700 hover:bg-neutral-200/60 dark:text-neutral-300 dark:hover:bg-neutral-800"
+                      }`}
+                    >
+                      <FolderIcon />
+                      <span className="truncate">{project.name}</span>
+                    </Link>
+                    <div className="ml-5 border-l border-neutral-200 pl-2 dark:border-neutral-800">
+                      {chats
+                        .filter((chat) => chat.projectId === project.id)
+                        .map((chat) => (
+                          <ChatRow
+                            key={chat.id}
+                            chat={chat}
+                            projects={projects}
+                            active={pathname === `/chat/${chat.id}`}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                ))
+              )}
+            </SidebarSection>
+
+            <SidebarSection title="Recent chats">
+              {unfiledChats.length === 0 ? (
+                <p className="px-2 py-1 text-sm text-neutral-400 dark:text-neutral-500">
+                  No chats yet
+                </p>
+              ) : (
+                unfiledChats.map((chat) => (
+                  <ChatRow
+                    key={chat.id}
+                    chat={chat}
+                    projects={projects}
+                    active={pathname === `/chat/${chat.id}`}
+                  />
+                ))
+              )}
+            </SidebarSection>
+          </>
+        )}
       </nav>
 
       <div className="border-t border-neutral-200 p-3 dark:border-neutral-800">
