@@ -47,16 +47,26 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             {message.attachmentName}
           </div>
         )}
-        <p className={`whitespace-pre-wrap ${isPending ? "animate-pulse" : ""}`}>
-          {message.content}
-        </p>
-        {message.imageUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={message.imageUrl}
-            alt="Generated result"
-            className="mt-2 w-full max-w-sm rounded-lg border border-black/10 dark:border-white/10"
-          />
+        {isPending ? (
+          <div>
+            <div className="h-48 w-full max-w-sm animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-neutral-400 dark:bg-neutral-500" />
+              {message.content}
+            </p>
+          </div>
+        ) : (
+          <>
+            <p className="whitespace-pre-wrap">{message.content}</p>
+            {message.imageUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={message.imageUrl}
+                alt="Generated result"
+                className="mt-2 w-full max-w-sm rounded-lg border border-black/10 dark:border-white/10"
+              />
+            )}
+          </>
         )}
       </div>
     </div>
